@@ -1,4 +1,4 @@
-grid_x;grid_y;cl_x;cl_y;hl_x;hl_y;id14
+x_label;y_label;cl_x;cl_y;hl_x;hl_y;tube_id
 2;1;70.688;0.704;0.812;0.704;TUBE.1
 4;1;69.875;0.704;1.625;0.704;TUBE.2
 6;1;69.062;0.704;2.438;0.704;TUBE.3
