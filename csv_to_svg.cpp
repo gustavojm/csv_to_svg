@@ -33,7 +33,6 @@ void read_inspection_plans(std::map<int, tube> &tubes) {
 	for (const auto &entry : std::filesystem::directory_iterator(path)) {
 		std::cout << "Procesando plan: " << entry.path().filename() << "\n";
 
-
 		if (!(entry.path().filename().extension() == ".csv")) {
 			continue;
 		}
@@ -59,8 +58,8 @@ void read_inspection_plans(std::map<int, tube> &tubes) {
 
 int main() {
 	float tube_r = .625 / 2;
-	int margin_x = 2;
-	int margin_y = 2;
+	int margin_x = 0;
+	int margin_y = 0;
 
 	// Parse the CSV file to extract the data for each tube
 	std::map<int, tube> tubes;
@@ -100,7 +99,9 @@ int main() {
 	svg_node->append_attribute(
 			doc.allocate_attribute("xmlns", "http://www.w3.org/2000/svg"));
 	svg_node->append_attribute(doc.allocate_attribute("version", "1.1"));
-	svg_node->append_attribute(doc.allocate_attribute("width", "2200"));
+	svg_node->append_attribute(doc.allocate_attribute("id", "tubesheet_svg"));
+	svg_node->append_attribute(doc.allocate_attribute("height", "auto"));
+	svg_node->append_attribute(doc.allocate_attribute("width", "auto"));
 	svg_node->append_attribute(
 			doc.allocate_attribute("viewBox",
 					doc.allocate_string(
