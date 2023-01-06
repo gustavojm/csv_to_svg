@@ -9,9 +9,9 @@
 #include <random>
 #include <cmath>
 #include "csv.h"
-#include "rapidxml-1.13/rapidxml.hpp"
-#include "rapidxml-1.13/rapidxml_utils.hpp"
-#include "rapidxml-1.13/rapidxml_print.hpp"
+#include "rapidxml.hpp"
+#include "rapidxml_utils.hpp"
+#include "rapidxml_print.hpp"
 
 struct tube {
 	std::string x_label;
@@ -126,6 +126,7 @@ int main() {
 	// Create an SVG circle element for each tube in the CSV data
 	for (const auto &tube_pair : tubes) {
 		auto tube = tube_pair.second;
+		auto tube_group_node = doc.allocate_node(rapidxml::node_element, "g");
 		auto tube_node = doc.allocate_node(rapidxml::node_element, "circle");
 		tube_node->append_attribute(
 				doc.allocate_attribute("cx",
@@ -148,10 +149,8 @@ int main() {
 				doc.allocate_string(
 						("X=" + tube.x_label + " Y="
 								+ tube.y_label + " " + tube.insp_plan).c_str()));
-		tube_node->append_node(tooltip_node);
-
-		svg_node->append_node(tube_node);
-
+		tube_group_node->append_node(tooltip_node);
+		tube_group_node->append_node(tube_node);
 		auto number_node = doc.allocate_node(rapidxml::node_element, "text",
 				doc.allocate_string(std::to_string(tube_pair.first).c_str()));
 		//number_node->value();
@@ -166,10 +165,11 @@ int main() {
 						doc.allocate_string(
 								(std::to_string(tube.hl_y + margin_y)).c_str())));
 
-		auto text_node_clone = doc.allocate_node(rapidxml::node_element);
-		doc.clone_node(tooltip_node, text_node_clone);
-		number_node->append_node(text_node_clone);
-		svg_node->append_node(number_node);
+		tube_group_node->append_node(number_node);
+
+		svg_node->append_node(tube_group_node);
+
+
 	}
 
 	// Write the SVG document to a file
