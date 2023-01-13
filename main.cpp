@@ -5,6 +5,7 @@
 #include <array>
 #include <utility>
 #include <filesystem>
+#include <algorithm>
 #include <ctime>
 #include <random>
 #include <cmath>
@@ -26,7 +27,9 @@ struct tube {
 
 void read_inspection_plans(std::map<int, tube> &tubes) {
 
-	std::array<std::string, 9> pastel_colors = {"#ffadad","#ffd6a5","#fdffb6","#caffbf","#9bf6ff","#a0c4ff","#bdb2ff","#ffc6ff","#ffffbb"};
+	std::array<std::string, 9> pastel_colors = { "#ffadad", "#ffd6a5",
+			"#fdffb6", "#caffbf", "#9bf6ff", "#a0c4ff", "#bdb2ff", "#ffc6ff",
+			"#ffffbb" };
 	int color = 0;
 
 	std::string path = "./insp_plan";
@@ -38,8 +41,8 @@ void read_inspection_plans(std::map<int, tube> &tubes) {
 		}
 
 		// Parse the CSV file to extract the data for the plan
-		io::CSVReader<3, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'> >
-		ip(	entry.path());
+		io::CSVReader<3, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'> > ip(
+				entry.path());
 		ip.read_header(io::ignore_extra_column, "ROW", "COL", "TUBE");
 		std::string row, col;
 		std::string tube_num;
@@ -58,24 +61,33 @@ void read_inspection_plans(std::map<int, tube> &tubes) {
 
 int main() {
 	float tube_r = .625 / 2;
-	int margin_x = 0;
-	int margin_y = 0;
+	int margin_x = 1;
+	int margin_y = 1;
 
 	// Parse the CSV file to extract the data for each tube
 	std::map<int, tube> tubes;
+	std::map<std::string, float> x_labels;
+	std::map<std::string, float> y_labels;
 	io::CSVReader<7, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'>> in(
 			"tubesheet.csv");
-	in.read_header(io::ignore_extra_column, "x_label", "y_label", "cl_x", "cl_y",
-			"hl_x", "hl_y", "tube_id");
+	in.read_header(io::ignore_extra_column, "x_label", "y_label", "cl_x",
+			"cl_y", "hl_x", "hl_y", "tube_id");
 	std::string x_label, y_label;
 	float cl_x, cl_y, hl_x, hl_y;
 	std::string tube_id;
 	while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
-		tubes.insert( { std::stoi(tube_id.substr(5)), { x_label, y_label, cl_x, cl_y,
-				hl_x, hl_y } });
+		tubes.insert( { std::stoi(tube_id.substr(5)), { x_label, y_label, cl_x,
+				cl_y, hl_x, hl_y } });
+
+		x_labels[x_label] = hl_x;
+		y_labels[y_label] = hl_y;
+
 	}
 
-	// Parse the CSV file to extract the data for the plan
+//	sort_labels(x_labels);
+//	sort_labels(y_labels);
+
+// Parse the CSV file to extract the data for the plan
 	read_inspection_plans(tubes);
 	// Search for max x and y distances
 	auto max_x_it = std::max_element(tubes.begin(), tubes.end(),
@@ -117,11 +129,59 @@ int main() {
 
 	style_node->value(
 			".tube {stroke: black; stroke-width: 0.02; } "
-					".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: black  }");
+					".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: black  }"
+					".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}");
 
 	svg_node->append_node(style_node);
 
 	doc.append_node(svg_node);
+
+	for (auto [label, coord] : x_labels) {
+		std::cout << "labels coord X: " << label << " : " << coord << "\n";
+
+		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
+				doc.allocate_string(label.c_str()));
+		label_node->append_attribute(
+				doc.allocate_attribute("x",
+						doc.allocate_string(
+								(std::to_string(coord + margin_x)).c_str())));
+		label_node->append_attribute(
+				doc.allocate_attribute("y", doc.allocate_string(((std::to_string(margin_y * 0.75).c_str())))));
+		label_node->append_attribute(
+				doc.allocate_attribute("class", "label"));
+
+//		auto label_g_node = doc.allocate_node(rapidxml::node_element, "g");
+//		label_g_node->append_attribute(
+//				doc.allocate_attribute("transform",
+//						doc.allocate_string(
+//								(("translate("
+//										+ std::to_string(margin_y * 0.75)
+//										+ ", "
+//										+ std::to_string(coord + margin_x)).c_str()))));
+//		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
+//				doc.allocate_string(label.c_str()));
+//		label_g_node->append_node(label_node);
+
+		svg_node->append_node(label_node);
+	}
+
+	for (auto [label, coord] : y_labels) {
+		std::cout << "labels coord X: " << label << " : " << coord << "\n";
+
+		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
+				doc.allocate_string(label.c_str()));
+		label_node->append_attribute(
+				doc.allocate_attribute("x",
+						doc.allocate_string(
+								(std::to_string(margin_x * 0.75).c_str()))));
+		label_node->append_attribute(
+				doc.allocate_attribute("y",
+						doc.allocate_string(
+								(std::to_string(coord + margin_y)).c_str())));
+		label_node->append_attribute(doc.allocate_attribute("class", "label"));
+
+		svg_node->append_node(label_node);
+	}
 
 	// Create an SVG circle element for each tube in the CSV data
 	for (const auto &tube_pair : tubes) {
@@ -147,8 +207,8 @@ int main() {
 		auto tooltip_node = doc.allocate_node(rapidxml::node_element, "title");
 		tooltip_node->value(
 				doc.allocate_string(
-						("X=" + tube.x_label + " Y="
-								+ tube.y_label + " " + tube.insp_plan).c_str()));
+						("X=" + tube.x_label + " Y=" + tube.y_label + " "
+								+ tube.insp_plan).c_str()));
 		tube_group_node->append_node(tooltip_node);
 		tube_group_node->append_node(tube_node);
 		auto number_node = doc.allocate_node(rapidxml::node_element, "text",
@@ -168,7 +228,6 @@ int main() {
 		tube_group_node->append_node(number_node);
 
 		svg_node->append_node(tube_group_node);
-
 
 	}
 
