@@ -150,17 +150,8 @@ int main() {
 		label_node->append_attribute(
 				doc.allocate_attribute("class", "label"));
 
-//		auto label_g_node = doc.allocate_node(rapidxml::node_element, "g");
-//		label_g_node->append_attribute(
-//				doc.allocate_attribute("transform",
-//						doc.allocate_string(
-//								(("translate("
-//										+ std::to_string(margin_y * 0.75)
-//										+ ", "
-//										+ std::to_string(coord + margin_x)).c_str()))));
-//		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
-//				doc.allocate_string(label.c_str()));
-//		label_g_node->append_node(label_node);
+		label_node->append_attribute(
+				doc.allocate_attribute("transform", doc.allocate_string(("rotate(270,"+ std::to_string(coord + margin_x) + "," + std::to_string(margin_y * 0.75) + ")").c_str())));
 
 		svg_node->append_node(label_node);
 	}

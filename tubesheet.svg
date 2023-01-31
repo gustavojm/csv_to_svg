@@ -1,179 +1,179 @@
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" id="tubesheet_svg" height="auto" width="auto" viewBox="0 0 75.000000 25.000000">
 	<style type="text/css">.tube {stroke: black; stroke-width: 0.02; } .tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: black  }.label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}</style>
-	<text x="1.406000" y="0.750000" class="label">1</text>
-	<text x="5.062000" y="0.750000" class="label">10</text>
-	<text x="42.875000" y="0.750000" class="label">100</text>
-	<text x="43.281002" y="0.750000" class="label">101</text>
-	<text x="43.688000" y="0.750000" class="label">102</text>
-	<text x="44.094002" y="0.750000" class="label">103</text>
-	<text x="44.500000" y="0.750000" class="label">104</text>
-	<text x="44.906002" y="0.750000" class="label">105</text>
-	<text x="45.311996" y="0.750000" class="label">106</text>
-	<text x="45.718998" y="0.750000" class="label">107</text>
-	<text x="46.125000" y="0.750000" class="label">108</text>
-	<text x="46.530998" y="0.750000" class="label">109</text>
-	<text x="5.469000" y="0.750000" class="label">11</text>
-	<text x="46.938000" y="0.750000" class="label">110</text>
-	<text x="47.344002" y="0.750000" class="label">111</text>
-	<text x="47.750000" y="0.750000" class="label">112</text>
-	<text x="48.155998" y="0.750000" class="label">113</text>
-	<text x="48.562000" y="0.750000" class="label">114</text>
-	<text x="48.969002" y="0.750000" class="label">115</text>
-	<text x="49.375000" y="0.750000" class="label">116</text>
-	<text x="49.781002" y="0.750000" class="label">117</text>
-	<text x="50.188000" y="0.750000" class="label">118</text>
-	<text x="50.594002" y="0.750000" class="label">119</text>
-	<text x="5.875000" y="0.750000" class="label">12</text>
-	<text x="51.000000" y="0.750000" class="label">120</text>
-	<text x="51.406002" y="0.750000" class="label">121</text>
-	<text x="51.811996" y="0.750000" class="label">122</text>
-	<text x="52.218998" y="0.750000" class="label">123</text>
-	<text x="52.625000" y="0.750000" class="label">124</text>
-	<text x="53.030998" y="0.750000" class="label">125</text>
-	<text x="53.438000" y="0.750000" class="label">126</text>
-	<text x="53.844002" y="0.750000" class="label">127</text>
-	<text x="54.250000" y="0.750000" class="label">128</text>
-	<text x="54.655998" y="0.750000" class="label">129</text>
-	<text x="6.281000" y="0.750000" class="label">13</text>
-	<text x="55.062000" y="0.750000" class="label">130</text>
-	<text x="55.469002" y="0.750000" class="label">131</text>
-	<text x="55.875000" y="0.750000" class="label">132</text>
-	<text x="56.281002" y="0.750000" class="label">133</text>
-	<text x="56.688000" y="0.750000" class="label">134</text>
-	<text x="57.094002" y="0.750000" class="label">135</text>
-	<text x="57.500000" y="0.750000" class="label">136</text>
-	<text x="57.906002" y="0.750000" class="label">137</text>
-	<text x="58.311996" y="0.750000" class="label">138</text>
-	<text x="58.718998" y="0.750000" class="label">139</text>
-	<text x="6.688000" y="0.750000" class="label">14</text>
-	<text x="59.125000" y="0.750000" class="label">140</text>
-	<text x="59.530998" y="0.750000" class="label">141</text>
-	<text x="59.938000" y="0.750000" class="label">142</text>
-	<text x="60.344002" y="0.750000" class="label">143</text>
-	<text x="60.750000" y="0.750000" class="label">144</text>
-	<text x="61.155998" y="0.750000" class="label">145</text>
-	<text x="61.562000" y="0.750000" class="label">146</text>
-	<text x="61.969002" y="0.750000" class="label">147</text>
-	<text x="62.375000" y="0.750000" class="label">148</text>
-	<text x="62.781002" y="0.750000" class="label">149</text>
-	<text x="7.094000" y="0.750000" class="label">15</text>
-	<text x="63.188000" y="0.750000" class="label">150</text>
-	<text x="63.594002" y="0.750000" class="label">151</text>
-	<text x="64.000000" y="0.750000" class="label">152</text>
-	<text x="64.406006" y="0.750000" class="label">153</text>
-	<text x="64.811996" y="0.750000" class="label">154</text>
-	<text x="65.219002" y="0.750000" class="label">155</text>
-	<text x="65.624992" y="0.750000" class="label">156</text>
-	<text x="66.030998" y="0.750000" class="label">157</text>
-	<text x="66.438004" y="0.750000" class="label">158</text>
-	<text x="66.844002" y="0.750000" class="label">159</text>
-	<text x="7.500000" y="0.750000" class="label">16</text>
-	<text x="67.250000" y="0.750000" class="label">160</text>
-	<text x="67.655998" y="0.750000" class="label">161</text>
-	<text x="68.061996" y="0.750000" class="label">162</text>
-	<text x="68.469002" y="0.750000" class="label">163</text>
-	<text x="68.875000" y="0.750000" class="label">164</text>
-	<text x="69.280998" y="0.750000" class="label">165</text>
-	<text x="69.688004" y="0.750000" class="label">166</text>
-	<text x="70.093994" y="0.750000" class="label">167</text>
-	<text x="70.500000" y="0.750000" class="label">168</text>
-	<text x="70.905998" y="0.750000" class="label">169</text>
-	<text x="7.906000" y="0.750000" class="label">17</text>
-	<text x="71.312004" y="0.750000" class="label">170</text>
-	<text x="71.719002" y="0.750000" class="label">171</text>
-	<text x="72.124992" y="0.750000" class="label">172</text>
-	<text x="72.530998" y="0.750000" class="label">173</text>
-	<text x="72.938004" y="0.750000" class="label">174</text>
-	<text x="73.344002" y="0.750000" class="label">175</text>
-	<text x="8.312000" y="0.750000" class="label">18</text>
-	<text x="8.719000" y="0.750000" class="label">19</text>
-	<text x="1.812000" y="0.750000" class="label">2</text>
-	<text x="9.125001" y="0.750000" class="label">20</text>
-	<text x="9.531000" y="0.750000" class="label">21</text>
-	<text x="9.938000" y="0.750000" class="label">22</text>
-	<text x="10.344000" y="0.750000" class="label">23</text>
-	<text x="10.750000" y="0.750000" class="label">24</text>
-	<text x="11.156000" y="0.750000" class="label">25</text>
-	<text x="11.562000" y="0.750000" class="label">26</text>
-	<text x="11.969000" y="0.750000" class="label">27</text>
-	<text x="12.375000" y="0.750000" class="label">28</text>
-	<text x="12.781000" y="0.750000" class="label">29</text>
-	<text x="2.219000" y="0.750000" class="label">3</text>
-	<text x="13.188001" y="0.750000" class="label">30</text>
-	<text x="13.594000" y="0.750000" class="label">31</text>
-	<text x="14.000000" y="0.750000" class="label">32</text>
-	<text x="14.405999" y="0.750000" class="label">33</text>
-	<text x="14.812000" y="0.750000" class="label">34</text>
-	<text x="15.219000" y="0.750000" class="label">35</text>
-	<text x="15.625001" y="0.750000" class="label">36</text>
-	<text x="16.031000" y="0.750000" class="label">37</text>
-	<text x="16.438000" y="0.750000" class="label">38</text>
-	<text x="16.844000" y="0.750000" class="label">39</text>
-	<text x="2.625000" y="0.750000" class="label">4</text>
-	<text x="17.250000" y="0.750000" class="label">40</text>
-	<text x="17.656000" y="0.750000" class="label">41</text>
-	<text x="18.062000" y="0.750000" class="label">42</text>
-	<text x="18.469000" y="0.750000" class="label">43</text>
-	<text x="18.874998" y="0.750000" class="label">44</text>
-	<text x="19.281000" y="0.750000" class="label">45</text>
-	<text x="19.688000" y="0.750000" class="label">46</text>
-	<text x="20.094000" y="0.750000" class="label">47</text>
-	<text x="20.500000" y="0.750000" class="label">48</text>
-	<text x="20.906000" y="0.750000" class="label">49</text>
-	<text x="3.031000" y="0.750000" class="label">5</text>
-	<text x="21.312000" y="0.750000" class="label">50</text>
-	<text x="21.719002" y="0.750000" class="label">51</text>
-	<text x="22.125000" y="0.750000" class="label">52</text>
-	<text x="22.531000" y="0.750000" class="label">53</text>
-	<text x="22.938000" y="0.750000" class="label">54</text>
-	<text x="23.344000" y="0.750000" class="label">55</text>
-	<text x="23.750000" y="0.750000" class="label">56</text>
-	<text x="24.156000" y="0.750000" class="label">57</text>
-	<text x="24.562000" y="0.750000" class="label">58</text>
-	<text x="24.969000" y="0.750000" class="label">59</text>
-	<text x="3.438000" y="0.750000" class="label">6</text>
-	<text x="25.374998" y="0.750000" class="label">60</text>
-	<text x="25.781000" y="0.750000" class="label">61</text>
-	<text x="26.188000" y="0.750000" class="label">62</text>
-	<text x="26.594000" y="0.750000" class="label">63</text>
-	<text x="27.000000" y="0.750000" class="label">64</text>
-	<text x="27.406000" y="0.750000" class="label">65</text>
-	<text x="27.812000" y="0.750000" class="label">66</text>
-	<text x="28.219002" y="0.750000" class="label">67</text>
-	<text x="28.625000" y="0.750000" class="label">68</text>
-	<text x="29.031000" y="0.750000" class="label">69</text>
-	<text x="3.844000" y="0.750000" class="label">7</text>
-	<text x="29.438000" y="0.750000" class="label">70</text>
-	<text x="29.844000" y="0.750000" class="label">71</text>
-	<text x="30.250000" y="0.750000" class="label">72</text>
-	<text x="30.656000" y="0.750000" class="label">73</text>
-	<text x="31.062000" y="0.750000" class="label">74</text>
-	<text x="31.469000" y="0.750000" class="label">75</text>
-	<text x="31.874998" y="0.750000" class="label">76</text>
-	<text x="32.280998" y="0.750000" class="label">77</text>
-	<text x="32.688000" y="0.750000" class="label">78</text>
-	<text x="33.094002" y="0.750000" class="label">79</text>
-	<text x="4.250000" y="0.750000" class="label">8</text>
-	<text x="33.500000" y="0.750000" class="label">80</text>
-	<text x="33.906002" y="0.750000" class="label">81</text>
-	<text x="34.311996" y="0.750000" class="label">82</text>
-	<text x="34.718998" y="0.750000" class="label">83</text>
-	<text x="35.125000" y="0.750000" class="label">84</text>
-	<text x="35.530998" y="0.750000" class="label">85</text>
-	<text x="35.938000" y="0.750000" class="label">86</text>
-	<text x="36.344002" y="0.750000" class="label">87</text>
-	<text x="38.406002" y="0.750000" class="label">89</text>
-	<text x="4.656000" y="0.750000" class="label">9</text>
-	<text x="38.811996" y="0.750000" class="label">90</text>
-	<text x="39.218998" y="0.750000" class="label">91</text>
-	<text x="39.625000" y="0.750000" class="label">92</text>
-	<text x="40.030998" y="0.750000" class="label">93</text>
-	<text x="40.438000" y="0.750000" class="label">94</text>
-	<text x="40.844002" y="0.750000" class="label">95</text>
-	<text x="41.250000" y="0.750000" class="label">96</text>
-	<text x="41.655998" y="0.750000" class="label">97</text>
-	<text x="42.062000" y="0.750000" class="label">98</text>
-	<text x="42.469002" y="0.750000" class="label">99</text>
+	<text x="1.406000" y="0.750000" class="label" transform="rotate(270,1.406000,0.750000)">1</text>
+	<text x="5.062000" y="0.750000" class="label" transform="rotate(270,5.062000,0.750000)">10</text>
+	<text x="42.875000" y="0.750000" class="label" transform="rotate(270,42.875000,0.750000)">100</text>
+	<text x="43.281002" y="0.750000" class="label" transform="rotate(270,43.281002,0.750000)">101</text>
+	<text x="43.688000" y="0.750000" class="label" transform="rotate(270,43.688000,0.750000)">102</text>
+	<text x="44.094002" y="0.750000" class="label" transform="rotate(270,44.094002,0.750000)">103</text>
+	<text x="44.500000" y="0.750000" class="label" transform="rotate(270,44.500000,0.750000)">104</text>
+	<text x="44.906002" y="0.750000" class="label" transform="rotate(270,44.906002,0.750000)">105</text>
+	<text x="45.311996" y="0.750000" class="label" transform="rotate(270,45.311996,0.750000)">106</text>
+	<text x="45.718998" y="0.750000" class="label" transform="rotate(270,45.718998,0.750000)">107</text>
+	<text x="46.125000" y="0.750000" class="label" transform="rotate(270,46.125000,0.750000)">108</text>
+	<text x="46.530998" y="0.750000" class="label" transform="rotate(270,46.530998,0.750000)">109</text>
+	<text x="5.469000" y="0.750000" class="label" transform="rotate(270,5.469000,0.750000)">11</text>
+	<text x="46.938000" y="0.750000" class="label" transform="rotate(270,46.938000,0.750000)">110</text>
+	<text x="47.344002" y="0.750000" class="label" transform="rotate(270,47.344002,0.750000)">111</text>
+	<text x="47.750000" y="0.750000" class="label" transform="rotate(270,47.750000,0.750000)">112</text>
+	<text x="48.155998" y="0.750000" class="label" transform="rotate(270,48.155998,0.750000)">113</text>
+	<text x="48.562000" y="0.750000" class="label" transform="rotate(270,48.562000,0.750000)">114</text>
+	<text x="48.969002" y="0.750000" class="label" transform="rotate(270,48.969002,0.750000)">115</text>
+	<text x="49.375000" y="0.750000" class="label" transform="rotate(270,49.375000,0.750000)">116</text>
+	<text x="49.781002" y="0.750000" class="label" transform="rotate(270,49.781002,0.750000)">117</text>
+	<text x="50.188000" y="0.750000" class="label" transform="rotate(270,50.188000,0.750000)">118</text>
+	<text x="50.594002" y="0.750000" class="label" transform="rotate(270,50.594002,0.750000)">119</text>
+	<text x="5.875000" y="0.750000" class="label" transform="rotate(270,5.875000,0.750000)">12</text>
+	<text x="51.000000" y="0.750000" class="label" transform="rotate(270,51.000000,0.750000)">120</text>
+	<text x="51.406002" y="0.750000" class="label" transform="rotate(270,51.406002,0.750000)">121</text>
+	<text x="51.811996" y="0.750000" class="label" transform="rotate(270,51.811996,0.750000)">122</text>
+	<text x="52.218998" y="0.750000" class="label" transform="rotate(270,52.218998,0.750000)">123</text>
+	<text x="52.625000" y="0.750000" class="label" transform="rotate(270,52.625000,0.750000)">124</text>
+	<text x="53.030998" y="0.750000" class="label" transform="rotate(270,53.030998,0.750000)">125</text>
+	<text x="53.438000" y="0.750000" class="label" transform="rotate(270,53.438000,0.750000)">126</text>
+	<text x="53.844002" y="0.750000" class="label" transform="rotate(270,53.844002,0.750000)">127</text>
+	<text x="54.250000" y="0.750000" class="label" transform="rotate(270,54.250000,0.750000)">128</text>
+	<text x="54.655998" y="0.750000" class="label" transform="rotate(270,54.655998,0.750000)">129</text>
+	<text x="6.281000" y="0.750000" class="label" transform="rotate(270,6.281000,0.750000)">13</text>
+	<text x="55.062000" y="0.750000" class="label" transform="rotate(270,55.062000,0.750000)">130</text>
+	<text x="55.469002" y="0.750000" class="label" transform="rotate(270,55.469002,0.750000)">131</text>
+	<text x="55.875000" y="0.750000" class="label" transform="rotate(270,55.875000,0.750000)">132</text>
+	<text x="56.281002" y="0.750000" class="label" transform="rotate(270,56.281002,0.750000)">133</text>
+	<text x="56.688000" y="0.750000" class="label" transform="rotate(270,56.688000,0.750000)">134</text>
+	<text x="57.094002" y="0.750000" class="label" transform="rotate(270,57.094002,0.750000)">135</text>
+	<text x="57.500000" y="0.750000" class="label" transform="rotate(270,57.500000,0.750000)">136</text>
+	<text x="57.906002" y="0.750000" class="label" transform="rotate(270,57.906002,0.750000)">137</text>
+	<text x="58.311996" y="0.750000" class="label" transform="rotate(270,58.311996,0.750000)">138</text>
+	<text x="58.718998" y="0.750000" class="label" transform="rotate(270,58.718998,0.750000)">139</text>
+	<text x="6.688000" y="0.750000" class="label" transform="rotate(270,6.688000,0.750000)">14</text>
+	<text x="59.125000" y="0.750000" class="label" transform="rotate(270,59.125000,0.750000)">140</text>
+	<text x="59.530998" y="0.750000" class="label" transform="rotate(270,59.530998,0.750000)">141</text>
+	<text x="59.938000" y="0.750000" class="label" transform="rotate(270,59.938000,0.750000)">142</text>
+	<text x="60.344002" y="0.750000" class="label" transform="rotate(270,60.344002,0.750000)">143</text>
+	<text x="60.750000" y="0.750000" class="label" transform="rotate(270,60.750000,0.750000)">144</text>
+	<text x="61.155998" y="0.750000" class="label" transform="rotate(270,61.155998,0.750000)">145</text>
+	<text x="61.562000" y="0.750000" class="label" transform="rotate(270,61.562000,0.750000)">146</text>
+	<text x="61.969002" y="0.750000" class="label" transform="rotate(270,61.969002,0.750000)">147</text>
+	<text x="62.375000" y="0.750000" class="label" transform="rotate(270,62.375000,0.750000)">148</text>
+	<text x="62.781002" y="0.750000" class="label" transform="rotate(270,62.781002,0.750000)">149</text>
+	<text x="7.094000" y="0.750000" class="label" transform="rotate(270,7.094000,0.750000)">15</text>
+	<text x="63.188000" y="0.750000" class="label" transform="rotate(270,63.188000,0.750000)">150</text>
+	<text x="63.594002" y="0.750000" class="label" transform="rotate(270,63.594002,0.750000)">151</text>
+	<text x="64.000000" y="0.750000" class="label" transform="rotate(270,64.000000,0.750000)">152</text>
+	<text x="64.406006" y="0.750000" class="label" transform="rotate(270,64.406006,0.750000)">153</text>
+	<text x="64.811996" y="0.750000" class="label" transform="rotate(270,64.811996,0.750000)">154</text>
+	<text x="65.219002" y="0.750000" class="label" transform="rotate(270,65.219002,0.750000)">155</text>
+	<text x="65.624992" y="0.750000" class="label" transform="rotate(270,65.624992,0.750000)">156</text>
+	<text x="66.030998" y="0.750000" class="label" transform="rotate(270,66.030998,0.750000)">157</text>
+	<text x="66.438004" y="0.750000" class="label" transform="rotate(270,66.438004,0.750000)">158</text>
+	<text x="66.844002" y="0.750000" class="label" transform="rotate(270,66.844002,0.750000)">159</text>
+	<text x="7.500000" y="0.750000" class="label" transform="rotate(270,7.500000,0.750000)">16</text>
+	<text x="67.250000" y="0.750000" class="label" transform="rotate(270,67.250000,0.750000)">160</text>
+	<text x="67.655998" y="0.750000" class="label" transform="rotate(270,67.655998,0.750000)">161</text>
+	<text x="68.061996" y="0.750000" class="label" transform="rotate(270,68.061996,0.750000)">162</text>
+	<text x="68.469002" y="0.750000" class="label" transform="rotate(270,68.469002,0.750000)">163</text>
+	<text x="68.875000" y="0.750000" class="label" transform="rotate(270,68.875000,0.750000)">164</text>
+	<text x="69.280998" y="0.750000" class="label" transform="rotate(270,69.280998,0.750000)">165</text>
+	<text x="69.688004" y="0.750000" class="label" transform="rotate(270,69.688004,0.750000)">166</text>
+	<text x="70.093994" y="0.750000" class="label" transform="rotate(270,70.093994,0.750000)">167</text>
+	<text x="70.500000" y="0.750000" class="label" transform="rotate(270,70.500000,0.750000)">168</text>
+	<text x="70.905998" y="0.750000" class="label" transform="rotate(270,70.905998,0.750000)">169</text>
+	<text x="7.906000" y="0.750000" class="label" transform="rotate(270,7.906000,0.750000)">17</text>
+	<text x="71.312004" y="0.750000" class="label" transform="rotate(270,71.312004,0.750000)">170</text>
+	<text x="71.719002" y="0.750000" class="label" transform="rotate(270,71.719002,0.750000)">171</text>
+	<text x="72.124992" y="0.750000" class="label" transform="rotate(270,72.124992,0.750000)">172</text>
+	<text x="72.530998" y="0.750000" class="label" transform="rotate(270,72.530998,0.750000)">173</text>
+	<text x="72.938004" y="0.750000" class="label" transform="rotate(270,72.938004,0.750000)">174</text>
+	<text x="73.344002" y="0.750000" class="label" transform="rotate(270,73.344002,0.750000)">175</text>
+	<text x="8.312000" y="0.750000" class="label" transform="rotate(270,8.312000,0.750000)">18</text>
+	<text x="8.719000" y="0.750000" class="label" transform="rotate(270,8.719000,0.750000)">19</text>
+	<text x="1.812000" y="0.750000" class="label" transform="rotate(270,1.812000,0.750000)">2</text>
+	<text x="9.125001" y="0.750000" class="label" transform="rotate(270,9.125001,0.750000)">20</text>
+	<text x="9.531000" y="0.750000" class="label" transform="rotate(270,9.531000,0.750000)">21</text>
+	<text x="9.938000" y="0.750000" class="label" transform="rotate(270,9.938000,0.750000)">22</text>
+	<text x="10.344000" y="0.750000" class="label" transform="rotate(270,10.344000,0.750000)">23</text>
+	<text x="10.750000" y="0.750000" class="label" transform="rotate(270,10.750000,0.750000)">24</text>
+	<text x="11.156000" y="0.750000" class="label" transform="rotate(270,11.156000,0.750000)">25</text>
+	<text x="11.562000" y="0.750000" class="label" transform="rotate(270,11.562000,0.750000)">26</text>
+	<text x="11.969000" y="0.750000" class="label" transform="rotate(270,11.969000,0.750000)">27</text>
+	<text x="12.375000" y="0.750000" class="label" transform="rotate(270,12.375000,0.750000)">28</text>
+	<text x="12.781000" y="0.750000" class="label" transform="rotate(270,12.781000,0.750000)">29</text>
+	<text x="2.219000" y="0.750000" class="label" transform="rotate(270,2.219000,0.750000)">3</text>
+	<text x="13.188001" y="0.750000" class="label" transform="rotate(270,13.188001,0.750000)">30</text>
+	<text x="13.594000" y="0.750000" class="label" transform="rotate(270,13.594000,0.750000)">31</text>
+	<text x="14.000000" y="0.750000" class="label" transform="rotate(270,14.000000,0.750000)">32</text>
+	<text x="14.405999" y="0.750000" class="label" transform="rotate(270,14.405999,0.750000)">33</text>
+	<text x="14.812000" y="0.750000" class="label" transform="rotate(270,14.812000,0.750000)">34</text>
+	<text x="15.219000" y="0.750000" class="label" transform="rotate(270,15.219000,0.750000)">35</text>
+	<text x="15.625001" y="0.750000" class="label" transform="rotate(270,15.625001,0.750000)">36</text>
+	<text x="16.031000" y="0.750000" class="label" transform="rotate(270,16.031000,0.750000)">37</text>
+	<text x="16.438000" y="0.750000" class="label" transform="rotate(270,16.438000,0.750000)">38</text>
+	<text x="16.844000" y="0.750000" class="label" transform="rotate(270,16.844000,0.750000)">39</text>
+	<text x="2.625000" y="0.750000" class="label" transform="rotate(270,2.625000,0.750000)">4</text>
+	<text x="17.250000" y="0.750000" class="label" transform="rotate(270,17.250000,0.750000)">40</text>
+	<text x="17.656000" y="0.750000" class="label" transform="rotate(270,17.656000,0.750000)">41</text>
+	<text x="18.062000" y="0.750000" class="label" transform="rotate(270,18.062000,0.750000)">42</text>
+	<text x="18.469000" y="0.750000" class="label" transform="rotate(270,18.469000,0.750000)">43</text>
+	<text x="18.874998" y="0.750000" class="label" transform="rotate(270,18.874998,0.750000)">44</text>
+	<text x="19.281000" y="0.750000" class="label" transform="rotate(270,19.281000,0.750000)">45</text>
+	<text x="19.688000" y="0.750000" class="label" transform="rotate(270,19.688000,0.750000)">46</text>
+	<text x="20.094000" y="0.750000" class="label" transform="rotate(270,20.094000,0.750000)">47</text>
+	<text x="20.500000" y="0.750000" class="label" transform="rotate(270,20.500000,0.750000)">48</text>
+	<text x="20.906000" y="0.750000" class="label" transform="rotate(270,20.906000,0.750000)">49</text>
+	<text x="3.031000" y="0.750000" class="label" transform="rotate(270,3.031000,0.750000)">5</text>
+	<text x="21.312000" y="0.750000" class="label" transform="rotate(270,21.312000,0.750000)">50</text>
+	<text x="21.719002" y="0.750000" class="label" transform="rotate(270,21.719002,0.750000)">51</text>
+	<text x="22.125000" y="0.750000" class="label" transform="rotate(270,22.125000,0.750000)">52</text>
+	<text x="22.531000" y="0.750000" class="label" transform="rotate(270,22.531000,0.750000)">53</text>
+	<text x="22.938000" y="0.750000" class="label" transform="rotate(270,22.938000,0.750000)">54</text>
+	<text x="23.344000" y="0.750000" class="label" transform="rotate(270,23.344000,0.750000)">55</text>
+	<text x="23.750000" y="0.750000" class="label" transform="rotate(270,23.750000,0.750000)">56</text>
+	<text x="24.156000" y="0.750000" class="label" transform="rotate(270,24.156000,0.750000)">57</text>
+	<text x="24.562000" y="0.750000" class="label" transform="rotate(270,24.562000,0.750000)">58</text>
+	<text x="24.969000" y="0.750000" class="label" transform="rotate(270,24.969000,0.750000)">59</text>
+	<text x="3.438000" y="0.750000" class="label" transform="rotate(270,3.438000,0.750000)">6</text>
+	<text x="25.374998" y="0.750000" class="label" transform="rotate(270,25.374998,0.750000)">60</text>
+	<text x="25.781000" y="0.750000" class="label" transform="rotate(270,25.781000,0.750000)">61</text>
+	<text x="26.188000" y="0.750000" class="label" transform="rotate(270,26.188000,0.750000)">62</text>
+	<text x="26.594000" y="0.750000" class="label" transform="rotate(270,26.594000,0.750000)">63</text>
+	<text x="27.000000" y="0.750000" class="label" transform="rotate(270,27.000000,0.750000)">64</text>
+	<text x="27.406000" y="0.750000" class="label" transform="rotate(270,27.406000,0.750000)">65</text>
+	<text x="27.812000" y="0.750000" class="label" transform="rotate(270,27.812000,0.750000)">66</text>
+	<text x="28.219002" y="0.750000" class="label" transform="rotate(270,28.219002,0.750000)">67</text>
+	<text x="28.625000" y="0.750000" class="label" transform="rotate(270,28.625000,0.750000)">68</text>
+	<text x="29.031000" y="0.750000" class="label" transform="rotate(270,29.031000,0.750000)">69</text>
+	<text x="3.844000" y="0.750000" class="label" transform="rotate(270,3.844000,0.750000)">7</text>
+	<text x="29.438000" y="0.750000" class="label" transform="rotate(270,29.438000,0.750000)">70</text>
+	<text x="29.844000" y="0.750000" class="label" transform="rotate(270,29.844000,0.750000)">71</text>
+	<text x="30.250000" y="0.750000" class="label" transform="rotate(270,30.250000,0.750000)">72</text>
+	<text x="30.656000" y="0.750000" class="label" transform="rotate(270,30.656000,0.750000)">73</text>
+	<text x="31.062000" y="0.750000" class="label" transform="rotate(270,31.062000,0.750000)">74</text>
+	<text x="31.469000" y="0.750000" class="label" transform="rotate(270,31.469000,0.750000)">75</text>
+	<text x="31.874998" y="0.750000" class="label" transform="rotate(270,31.874998,0.750000)">76</text>
+	<text x="32.280998" y="0.750000" class="label" transform="rotate(270,32.280998,0.750000)">77</text>
+	<text x="32.688000" y="0.750000" class="label" transform="rotate(270,32.688000,0.750000)">78</text>
+	<text x="33.094002" y="0.750000" class="label" transform="rotate(270,33.094002,0.750000)">79</text>
+	<text x="4.250000" y="0.750000" class="label" transform="rotate(270,4.250000,0.750000)">8</text>
+	<text x="33.500000" y="0.750000" class="label" transform="rotate(270,33.500000,0.750000)">80</text>
+	<text x="33.906002" y="0.750000" class="label" transform="rotate(270,33.906002,0.750000)">81</text>
+	<text x="34.311996" y="0.750000" class="label" transform="rotate(270,34.311996,0.750000)">82</text>
+	<text x="34.718998" y="0.750000" class="label" transform="rotate(270,34.718998,0.750000)">83</text>
+	<text x="35.125000" y="0.750000" class="label" transform="rotate(270,35.125000,0.750000)">84</text>
+	<text x="35.530998" y="0.750000" class="label" transform="rotate(270,35.530998,0.750000)">85</text>
+	<text x="35.938000" y="0.750000" class="label" transform="rotate(270,35.938000,0.750000)">86</text>
+	<text x="36.344002" y="0.750000" class="label" transform="rotate(270,36.344002,0.750000)">87</text>
+	<text x="38.406002" y="0.750000" class="label" transform="rotate(270,38.406002,0.750000)">89</text>
+	<text x="4.656000" y="0.750000" class="label" transform="rotate(270,4.656000,0.750000)">9</text>
+	<text x="38.811996" y="0.750000" class="label" transform="rotate(270,38.811996,0.750000)">90</text>
+	<text x="39.218998" y="0.750000" class="label" transform="rotate(270,39.218998,0.750000)">91</text>
+	<text x="39.625000" y="0.750000" class="label" transform="rotate(270,39.625000,0.750000)">92</text>
+	<text x="40.030998" y="0.750000" class="label" transform="rotate(270,40.030998,0.750000)">93</text>
+	<text x="40.438000" y="0.750000" class="label" transform="rotate(270,40.438000,0.750000)">94</text>
+	<text x="40.844002" y="0.750000" class="label" transform="rotate(270,40.844002,0.750000)">95</text>
+	<text x="41.250000" y="0.750000" class="label" transform="rotate(270,41.250000,0.750000)">96</text>
+	<text x="41.655998" y="0.750000" class="label" transform="rotate(270,41.655998,0.750000)">97</text>
+	<text x="42.062000" y="0.750000" class="label" transform="rotate(270,42.062000,0.750000)">98</text>
+	<text x="42.469002" y="0.750000" class="label" transform="rotate(270,42.469002,0.750000)">99</text>
 	<text x="0.750000" y="1.704000" class="label">1</text>
 	<text x="0.750000" y="8.036000" class="label">10</text>
 	<text x="0.750000" y="8.740000" class="label">11</text>
