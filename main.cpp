@@ -117,12 +117,12 @@ int main() {
 	svg_node->append_attribute(
 			doc.allocate_attribute("viewBox",
 					doc.allocate_string(
-							("0 0 "
+							("-" + std::to_string(margin_x) + " -" + std::to_string(margin_y) + " "
 									+ std::to_string(
-											std::ceil(max_x) + (2 * margin_x))
+											std::ceil(max_x) + margin_x)
 									+ " "
 									+ std::to_string(
-											std::ceil(max_y) + (2 * margin_y))).c_str())));
+											std::ceil(max_y) + margin_y)).c_str())));
 
 	auto style_node = doc.allocate_node(rapidxml::node_element, "style");
 	style_node->append_attribute(doc.allocate_attribute("type", "text/css"));
@@ -144,14 +144,14 @@ int main() {
 		label_node->append_attribute(
 				doc.allocate_attribute("x",
 						doc.allocate_string(
-								(std::to_string(coord + margin_x)).c_str())));
+								(std::to_string(coord)).c_str())));
 		label_node->append_attribute(
-				doc.allocate_attribute("y", doc.allocate_string(((std::to_string(margin_y * 0.75).c_str())))));
+				doc.allocate_attribute("y", doc.allocate_string(("-" + std::to_string(margin_y * 0.75)).c_str())));
 		label_node->append_attribute(
 				doc.allocate_attribute("class", "label"));
 
 		label_node->append_attribute(
-				doc.allocate_attribute("transform", doc.allocate_string(("rotate(270,"+ std::to_string(coord + margin_x) + "," + std::to_string(margin_y * 0.75) + ")").c_str())));
+				doc.allocate_attribute("transform", doc.allocate_string(("rotate(270,"+ std::to_string(coord) + ", -" + std::to_string(margin_y * 0.75) + ")").c_str())));
 
 		svg_node->append_node(label_node);
 	}
@@ -164,11 +164,11 @@ int main() {
 		label_node->append_attribute(
 				doc.allocate_attribute("x",
 						doc.allocate_string(
-								(std::to_string(margin_x * 0.75).c_str()))));
+								("-" +  std::to_string(margin_x * 0.75)).c_str())));
 		label_node->append_attribute(
 				doc.allocate_attribute("y",
 						doc.allocate_string(
-								(std::to_string(coord + margin_y)).c_str())));
+								(std::to_string(coord)).c_str())));
 		label_node->append_attribute(doc.allocate_attribute("class", "label"));
 
 		svg_node->append_node(label_node);
@@ -182,11 +182,11 @@ int main() {
 		tube_node->append_attribute(
 				doc.allocate_attribute("cx",
 						doc.allocate_string(
-								(std::to_string(tube.hl_x + margin_x)).c_str())));
+								(std::to_string(tube.hl_x)).c_str())));
 		tube_node->append_attribute(
 				doc.allocate_attribute("cy",
 						doc.allocate_string(
-								(std::to_string(tube.hl_y + margin_y)).c_str())));
+								(std::to_string(tube.hl_y)).c_str())));
 		tube_node->append_attribute(
 				doc.allocate_attribute("r",
 						doc.allocate_string(std::to_string(tube_r).c_str())));
@@ -210,11 +210,11 @@ int main() {
 		number_node->append_attribute(
 				doc.allocate_attribute("x",
 						doc.allocate_string(
-								(std::to_string(tube.hl_x + margin_x)).c_str())));
+								(std::to_string(tube.hl_x)).c_str())));
 		number_node->append_attribute(
 				doc.allocate_attribute("y",
 						doc.allocate_string(
-								(std::to_string(tube.hl_y + margin_y)).c_str())));
+								(std::to_string(tube.hl_y)).c_str())));
 
 		tube_group_node->append_node(number_node);
 
