@@ -32,7 +32,7 @@ void read_inspection_plans(std::map<int, tube> &tubes) {
 			"#ffffbb" };
 	int color = 0;
 
-	std::string path = "./insp_plan";
+	std::string path = "./insp_plans";
 	for (const auto &entry : std::filesystem::directory_iterator(path)) {
 		std::cout << "Procesando plan: " << entry.path().filename() << "\n";
 
@@ -88,7 +88,7 @@ int main() {
 //	sort_labels(y_labels);
 
 // Parse the CSV file to extract the data for the plan
-	read_inspection_plans(tubes);
+	// read_inspection_plans(tubes);
 	// Search for max x and y distances
 	auto max_x_it = std::max_element(tubes.begin(), tubes.end(),
 			[](auto a, auto b) {
@@ -178,6 +178,11 @@ int main() {
 	for (const auto &tube_pair : tubes) {
 		auto tube = tube_pair.second;
 		auto tube_group_node = doc.allocate_node(rapidxml::node_element, "g");
+		tube_group_node->append_attribute(
+				doc.allocate_attribute("id",
+						doc.allocate_string(
+								(std::to_string(tube_pair.first)).c_str())));
+
 		auto tube_node = doc.allocate_node(rapidxml::node_element, "circle");
 		tube_node->append_attribute(
 				doc.allocate_attribute("cx",
