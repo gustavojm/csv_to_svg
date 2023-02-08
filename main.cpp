@@ -167,7 +167,7 @@ int main() {
 		auto tooltip_node = doc.allocate_node(rapidxml::node_element, "title");
 		tooltip_node->value(
 				doc.allocate_string(
-						("X=" + tube.x_label + " Y=" + tube.y_label).c_str()));
+						("Col=" + tube.x_label + " Row=" + tube.y_label).c_str()));
 		tube_group_node->append_node(tooltip_node);
 		tube_group_node->append_node(tube_node);
 		auto number_node = doc.allocate_node(rapidxml::node_element, "text",
