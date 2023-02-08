@@ -140,6 +140,16 @@ int main() {
 						doc.allocate_string(
 								(std::to_string(tube_pair.first)).c_str())));
 
+		tube_group_node->append_attribute(
+				doc.allocate_attribute("data-col",
+						doc.allocate_string(
+								(tube.x_label).c_str())));
+
+		tube_group_node->append_attribute(
+				doc.allocate_attribute("data-row",
+						doc.allocate_string(
+								(tube.y_label).c_str())));
+
 		auto tube_node = doc.allocate_node(rapidxml::node_element, "circle");
 		tube_node->append_attribute(
 				doc.allocate_attribute("cx",
