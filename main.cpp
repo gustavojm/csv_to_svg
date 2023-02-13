@@ -19,10 +19,69 @@ struct tube {
 	float hl_y;
 };
 
+void append_attributes(rapidxml::xml_document<char> &doc, rapidxml::xml_node<char> *node, std::map<std::string, std::string> attrs) {
+	if (node) {
+
+		for (auto attr : attrs) {
+			node->append_attribute(
+							doc.allocate_attribute(doc.allocate_string(attr.first.c_str()),
+									doc.allocate_string(attr.second.c_str())));
+		}
+	}
+}
+
+void add_dashed_line(rapidxml::xml_node<char> *parent_node, float x1, float y1, float x2, float y2) {
+		auto doc = parent_node->document();
+		auto line_node = doc->allocate_node(rapidxml::node_element, "line");
+		append_attributes(*doc, line_node, {
+				{"x1", std::to_string(x1)},
+				{"y1", std::to_string(y1)},
+				{"x2", std::to_string(x2)},
+				{"y2", std::to_string(y2)},
+				{"stroke", "gray"},
+				{"stroke-width", "0.02"},
+				{"stroke-dasharray", "0.2, 0.1"},
+		});
+
+		parent_node->append_node(line_node);
+}
+
+rapidxml::xml_node<char>* add_label(rapidxml::xml_node<char> *parent_node, float x, float y, const char* label) {
+	auto doc = parent_node->document();
+	auto label_node = doc->allocate_node(rapidxml::node_element, "text",
+			doc->allocate_string(label));
+
+	append_attributes(*doc, label_node, {
+			{"x", std::to_string(x)},
+			{"y", std::to_string(y)},
+			{"class", "label"},
+	});
+
+	return label_node;
+}
+
+std::string read_tube_specs(std::string par) {
+
+	io::CSVReader<3, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'>> in(
+				"tube_specs.csv");
+		in.read_header(io::ignore_extra_column, "Dato", "Valor", "Unidad");
+		std::string dato, valor, unidad;
+		while (in.read_row(dato, valor, unidad)) {
+			std::transform(dato.begin(), dato.end(),dato.begin(), ::toupper);
+			if (dato == par) {
+				return valor;
+			}
+		}
+		return("");
+}
+
 int main() {
-	float tube_r = .625 / 2;
+	float tube_od = std::stof(read_tube_specs("TUBE_OD"));
+	float tube_r = tube_od / 2;
 	int margin_x = 1;
 	int margin_y = 1;
+
+
 
 	// Parse the CSV file to extract the data for each tube
 	std::map<int, tube> tubes;
@@ -60,27 +119,19 @@ int main() {
 	std::cout << "absolute max Y :" << max_y << '\n';
 
 	// Create the SVG document
-	rapidxml::xml_document<> doc;
+	rapidxml::xml_document<char> doc;
 	auto svg_node = doc.allocate_node(rapidxml::node_element, "svg");
 
-	svg_node->append_attribute(
-			doc.allocate_attribute("xmlns", "http://www.w3.org/2000/svg"));
-	svg_node->append_attribute(doc.allocate_attribute("version", "1.1"));
-	svg_node->append_attribute(doc.allocate_attribute("id", "tubesheet_svg"));
-	svg_node->append_attribute(doc.allocate_attribute("height", "auto"));
-	svg_node->append_attribute(doc.allocate_attribute("width", "auto"));
-	svg_node->append_attribute(
-			doc.allocate_attribute("viewBox",
-					doc.allocate_string(
-							("-" + std::to_string(margin_x) + " -"
-									+ std::to_string(margin_y) + " "
-									+ std::to_string(
-											std::ceil(max_x) + margin_x) + " "
-									+ std::to_string(
-											std::ceil(max_y) + margin_y)).c_str())));
+	append_attributes(doc, svg_node, {
+	{"xmlns", "http://www.w3.org/2000/svg"},
+	{"version", "1.1"},
+	{"id", "tubesheet_svg"},
+	{"height", "auto"},
+	{"width", "auto"},
+	{"viewBox", "-" + std::to_string(margin_x) + " -" + std::to_string(margin_y) + " " + std::to_string(std::ceil(max_x) + margin_x) + " " + std::to_string(std::ceil(max_y) + margin_y)}});
 
 	auto style_node = doc.allocate_node(rapidxml::node_element, "style");
-	style_node->append_attribute(doc.allocate_attribute("type", "text/css"));
+	append_attributes(doc, style_node, {{"type", "text/css"}});
 
 	style_node->value(
 			".tube {stroke: black; stroke-width: 0.02; fill: none;} "
@@ -88,81 +139,46 @@ int main() {
 					".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}");
 
 	svg_node->append_node(style_node);
-
 	doc.append_node(svg_node);
+
+	add_dashed_line(svg_node, -margin_x, 0, std::ceil(max_x) + margin_x, 0);
+	add_dashed_line(svg_node, 0, -margin_y, 0, std::ceil(max_y) + margin_y);
 
 	for (auto [label, coord] : x_labels) {
 		std::cout << "labels coord X: " << label << " : " << coord << "\n";
 
-		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
-				doc.allocate_string(label.c_str()));
-		label_node->append_attribute(
-				doc.allocate_attribute("x",
-						doc.allocate_string((std::to_string(coord)).c_str())));
-		label_node->append_attribute(
-				doc.allocate_attribute("y",
-						doc.allocate_string(
-								("-" + std::to_string(margin_y * 0.75)).c_str())));
-		label_node->append_attribute(doc.allocate_attribute("class", "label"));
-
-		label_node->append_attribute(
-				doc.allocate_attribute("transform",
-						doc.allocate_string(
-								("rotate(270," + std::to_string(coord) + ", -"
-										+ std::to_string(margin_y * 0.75) + ")").c_str())));
-
-		svg_node->append_node(label_node);
+		auto label_x = add_label(svg_node, coord, -margin_y * 0.75, label.c_str());
+		append_attributes(doc, label_x, {
+				{"transform", "rotate(270," + std::to_string(coord) + ", -" + std::to_string(margin_y * 0.75) + ")"},
+		});
+		svg_node->append_node(label_x);
 	}
 
 	for (auto [label, coord] : y_labels) {
-		std::cout << "labels coord X: " << label << " : " << coord << "\n";
+		std::cout << "labels coord Y: " << label << " : " << coord << "\n";
 
-		auto label_node = doc.allocate_node(rapidxml::node_element, "text",
-				doc.allocate_string(label.c_str()));
-		label_node->append_attribute(
-				doc.allocate_attribute("x",
-						doc.allocate_string(
-								("-" + std::to_string(margin_x * 0.75)).c_str())));
-		label_node->append_attribute(
-				doc.allocate_attribute("y",
-						doc.allocate_string((std::to_string(coord)).c_str())));
-		label_node->append_attribute(doc.allocate_attribute("class", "label"));
-
-		svg_node->append_node(label_node);
+		auto label_y = add_label(svg_node, -margin_x * 0.75, coord, label.c_str());
+		svg_node->append_node(label_y);
 	}
 
 	// Create an SVG circle element for each tube in the CSV data
 	for (const auto &tube_pair : tubes) {
 		auto tube = tube_pair.second;
 		auto tube_group_node = doc.allocate_node(rapidxml::node_element, "g");
-		tube_group_node->append_attribute(
-				doc.allocate_attribute("id",
-						doc.allocate_string(
-								(std::to_string(tube_pair.first)).c_str())));
+		append_attributes(doc, tube_group_node, {
+				{"id", std::to_string(tube_pair.first)},
+				{"data-col", tube.x_label},
+				{"data-row", tube.y_label}
 
-		tube_group_node->append_attribute(
-				doc.allocate_attribute("data-col",
-						doc.allocate_string(
-								(tube.x_label).c_str())));
-
-		tube_group_node->append_attribute(
-				doc.allocate_attribute("data-row",
-						doc.allocate_string(
-								(tube.y_label).c_str())));
+		});
 
 		auto tube_node = doc.allocate_node(rapidxml::node_element, "circle");
-		tube_node->append_attribute(
-				doc.allocate_attribute("cx",
-						doc.allocate_string(
-								(std::to_string(tube.hl_x)).c_str())));
-		tube_node->append_attribute(
-				doc.allocate_attribute("cy",
-						doc.allocate_string(
-								(std::to_string(tube.hl_y)).c_str())));
-		tube_node->append_attribute(
-				doc.allocate_attribute("r",
-						doc.allocate_string(std::to_string(tube_r).c_str())));
-		tube_node->append_attribute(doc.allocate_attribute("class", "tube"));
+		append_attributes(doc, tube_node, {
+				{"cx", std::to_string(tube.hl_x)},
+				{"cy", std::to_string(tube.hl_y)},
+				{"r", std::to_string(tube_r)},
+				{"class", "tube"},
+		});
 
 		auto tooltip_node = doc.allocate_node(rapidxml::node_element, "title");
 		tooltip_node->value(
@@ -173,16 +189,11 @@ int main() {
 		auto number_node = doc.allocate_node(rapidxml::node_element, "text",
 				doc.allocate_string(std::to_string(tube_pair.first).c_str()));
 		//number_node->value();
-		number_node->append_attribute(
-				doc.allocate_attribute("class", "tube_num"));
-		number_node->append_attribute(
-				doc.allocate_attribute("x",
-						doc.allocate_string(
-								(std::to_string(tube.hl_x)).c_str())));
-		number_node->append_attribute(
-				doc.allocate_attribute("y",
-						doc.allocate_string(
-								(std::to_string(tube.hl_y)).c_str())));
+		append_attributes(doc, number_node, {
+				{"class", "tube_num"},
+				{"x", std::to_string(tube.hl_x)},
+				{"y", std::to_string(tube.hl_y)},
+		});
 
 		tube_group_node->append_node(number_node);
 
