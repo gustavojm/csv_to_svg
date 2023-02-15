@@ -134,7 +134,7 @@ int main() {
 	append_attributes(doc, style_node, {{"type", "text/css"}});
 
 	style_node->value(
-			".tube {stroke: black; stroke-width: 0.02; fill: none;} "
+			".tube {stroke: black; stroke-width: 0.02; fill: white;} "
 					".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: black;}"
 					".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}");
 
