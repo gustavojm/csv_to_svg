@@ -9,6 +9,7 @@
 #include "inc/rapidxml-1.13/rapidxml.hpp"
 #include "inc/rapidxml-1.13/rapidxml_utils.hpp"
 #include "inc/rapidxml-1.13/rapidxml_print.hpp"
+#include <boost/program_options.hpp>
 
 struct tube {
     std::string x_label;
@@ -103,7 +104,29 @@ rapidxml::xml_node<char>* add_tube(const rapidxml::xml_node<char> &parent_node,
 
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+
+    namespace po = boost::program_options;
+    std::string leg = "both";
+
+    try {
+        po::options_description settings_desc("CSV to SVG Settings");
+        settings_desc.add_options()("leg",
+                po::value<std::string>(&leg)->default_value("both"),
+                "Leg (hot, cold, both)");
+
+        po::variables_map vm;
+        po::store(po::parse_command_line(argc, argv, settings_desc), vm);
+        std::filesystem::path config = std::filesystem::path("csv_to_svg.ini");
+        if (std::filesystem::exists(config)) {
+            std::ifstream config_is = std::ifstream(config);
+            po::store(po::parse_config_file(config_is, settings_desc), vm);
+        }
+        po::notify(vm);
+    } catch (std::exception &e) {
+        std::cout << e.what() << std::endl;
+    }
+
     float tube_od = std::stof(read_tube_specs("TUBE_OD"));
     float tube_r = tube_od / 2;
 
@@ -114,8 +137,8 @@ int main() {
 
     // Parse the CSV file to extract the data for each tube
     std::map<std::string, tube> tubes;
-    std::map<std::string, float> x_labels;
-    std::map<std::string, float> y_labels;
+    std::set<std::pair<std::string, float>> x_labels;
+    std::set<std::pair<std::string, float>> y_labels;
     io::CSVReader<7, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'>> in(
             "tubesheet.csv");
     in.read_header(io::ignore_extra_column, "x_label", "y_label", "cl_x",
@@ -124,15 +147,22 @@ int main() {
     float cl_x, cl_y, hl_x, hl_y;
     std::string tube_id;
     while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
-        tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)), {
-                x_label, y_label, hl_x, hl_y + (calle_ancha / 2) } });
-        tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)), {
-                x_label, y_label, cl_x + 1.25f,
-                -(cl_y + (calle_ancha / 2)) } });
+        if (leg == "cold" || leg == "both") {
+            tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)),
+                    { x_label, y_label, cl_x,
+                            -(cl_y + (calle_ancha / 2)) } });
+            x_labels.insert(std::make_pair(x_label, cl_x));
+            y_labels.insert(
+                    std::make_pair(y_label, -(cl_y + (calle_ancha / 2))));
+        }
 
-        x_labels[x_label] = hl_x;
-        y_labels[y_label] = hl_y;
-
+        if (leg == "hot" || leg == "both") {
+            tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)),
+                    { x_label, y_label, hl_x, hl_y + (calle_ancha / 2) } });
+            x_labels.insert(std::make_pair(x_label, hl_x));
+            y_labels.insert(
+                    std::make_pair(y_label, (hl_y + (calle_ancha / 2))));
+        }
     }
 
     // Search for max x and y distances
@@ -141,14 +171,14 @@ int main() {
                 return a.second.x < b.second.x;
             });
     float min_x = (*min_x_it).second.x;
-    std::cout << "absolute min X :" << min_x << '\n';
+    std::cout << "min X :" << min_x << '\n';
 
     auto min_y_it = std::min_element(tubes.begin(), tubes.end(),
             [](auto a, auto b) {
                 return a.second.y < b.second.y;
             });
     float min_y = (*min_y_it).second.y;
-    std::cout << "absolute min Y :" << min_y << '\n';
+    std::cout << "min Y :" << min_y << '\n';
 
     // Search for max x and y distances
     auto max_x_it = std::max_element(tubes.begin(), tubes.end(),
@@ -156,14 +186,21 @@ int main() {
                 return a.second.x < b.second.x;
             });
     float max_x = (*max_x_it).second.x;
-    std::cout << "absolute max X :" << max_x << '\n';
+    std::cout << "max X :" << max_x << '\n';
 
     auto max_y_it = std::max_element(tubes.begin(), tubes.end(),
             [](auto a, auto b) {
                 return a.second.y < b.second.y;
             });
     float max_y = (*max_y_it).second.y;
-    std::cout << "absolute max Y :" << max_y << '\n';
+    std::cout << "max Y :" << max_y << '\n';
+
+    auto abs_max_y_it = std::max_element(tubes.begin(), tubes.end(),
+            [](auto a, auto b) {
+                return std::abs(a.second.y) < std::abs(b.second.y);
+            });
+    float abs_max_y = std::abs((*abs_max_y_it).second.y);
+    std::cout << "Absolute max Y :" << abs_max_y << '\n';
 
     // Create the SVG document
     rapidxml::xml_document<char> doc;
@@ -172,10 +209,11 @@ int main() {
     append_attributes(doc, svg_node,
             { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
                     "id", "tubesheet_svg" }, { "height", "auto" }, { "width",
-                    "auto" }, { "viewBox", std::to_string(-margin_x + std::floor(min_x)) + " "
+                    "auto" }, { "viewBox", std::to_string(
+                    -margin_x + std::floor(min_x)) + " "
                     + std::to_string(-margin_y + std::floor(min_y)) + " "
                     + std::to_string(std::ceil(max_x) + margin_x) + " "
-                    + std::to_string(std::ceil(2 * max_y) + margin_y) } });
+                    + std::to_string(std::ceil(2 * abs_max_y) + margin_y) } });
 
     auto style_node = doc.allocate_node(rapidxml::node_element, "style");
     append_attributes(doc, style_node, { { "type", "text/css" } });
@@ -188,7 +226,8 @@ int main() {
     svg_node->append_node(style_node);
     doc.append_node(svg_node);
 
-    add_dashed_line(svg_node, -margin_x + + std::floor(min_x), 0, std::ceil(max_x) + margin_x, 0);
+    add_dashed_line(svg_node, -margin_x + +std::floor(min_x), 0,
+            std::ceil(max_x) + margin_x, 0);
     add_dashed_line(svg_node, 0, -margin_y + std::floor(min_y), 0,
             std::ceil(max_y) + margin_y);
 
@@ -206,14 +245,9 @@ int main() {
     for (auto [label, coord] : y_labels) {
         std::cout << "labels coord Y: " << label << " : " << coord << "\n";
 
-        auto label_y_cl = add_label(svg_node, -margin_x * 0.75,
-                -(coord + calle_ancha / 2), label.c_str());
-        svg_node->append_node(label_y_cl);
-
-        auto label_y_hl = add_label(svg_node, -margin_x * 0.75,
-                coord + calle_ancha / 2, label.c_str());
-        svg_node->append_node(label_y_hl);
-
+        auto label_y = add_label(svg_node, -margin_x * 0.75, coord,
+                label.c_str());
+        svg_node->append_node(label_y);
     }
 
     // Create an SVG circle element for each tube in the CSV data
