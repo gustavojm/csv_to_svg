@@ -13,7 +13,6 @@
 struct tube {
     std::string x_label;
     std::string y_label;
-    std::string leg;
     float x;
     float y;
 };
@@ -126,9 +125,9 @@ int main() {
     std::string tube_id;
     while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
         tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)), {
-                x_label, y_label, "hl", hl_x, hl_y + (calle_ancha / 2) } });
+                x_label, y_label, hl_x, hl_y + (calle_ancha / 2) } });
         tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)), {
-                x_label, y_label, "cl", cl_x + 1.25f,
+                x_label, y_label, cl_x + 1.25f,
                 -(cl_y + (calle_ancha / 2)) } });
 
         x_labels[x_label] = hl_x;
@@ -137,6 +136,13 @@ int main() {
     }
 
     // Search for max x and y distances
+    auto min_x_it = std::min_element(tubes.begin(), tubes.end(),
+            [](auto a, auto b) {
+                return a.second.x < b.second.x;
+            });
+    float min_x = (*min_x_it).second.x;
+    std::cout << "absolute min X :" << min_x << '\n';
+
     auto min_y_it = std::min_element(tubes.begin(), tubes.end(),
             [](auto a, auto b) {
                 return a.second.y < b.second.y;
@@ -166,7 +172,7 @@ int main() {
     append_attributes(doc, svg_node,
             { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
                     "id", "tubesheet_svg" }, { "height", "auto" }, { "width",
-                    "auto" }, { "viewBox", "-" + std::to_string(margin_x) + " "
+                    "auto" }, { "viewBox", std::to_string(-margin_x + std::floor(min_x)) + " "
                     + std::to_string(-margin_y + std::floor(min_y)) + " "
                     + std::to_string(std::ceil(max_x) + margin_x) + " "
                     + std::to_string(std::ceil(2 * max_y) + margin_y) } });
@@ -182,7 +188,7 @@ int main() {
     svg_node->append_node(style_node);
     doc.append_node(svg_node);
 
-    add_dashed_line(svg_node, -margin_x, 0, std::ceil(max_x) + margin_x, 0);
+    add_dashed_line(svg_node, -margin_x + + std::floor(min_x), 0, std::ceil(max_x) + margin_x, 0);
     add_dashed_line(svg_node, 0, -margin_y + std::floor(min_y), 0,
             std::ceil(max_y) + margin_y);
 
