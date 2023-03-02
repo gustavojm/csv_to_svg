@@ -10,6 +10,7 @@
 #include "inc/rapidxml-1.13/rapidxml_utils.hpp"
 #include "inc/rapidxml-1.13/rapidxml_print.hpp"
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 
 struct tube {
     std::string x_label;
@@ -56,21 +57,6 @@ rapidxml::xml_node<char>* add_label(rapidxml::xml_node<char> *parent_node,
     return label_node;
 }
 
-std::string read_tube_specs(std::string par) {
-
-    io::CSVReader<3, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'>> in(
-            "tube_specs.csv");
-    in.read_header(io::ignore_extra_column, "Dato", "Valor", "Unidad");
-    std::string dato, valor, unidad;
-    while (in.read_row(dato, valor, unidad)) {
-        std::transform(dato.begin(), dato.end(), dato.begin(), ::toupper);
-        if (dato == par) {
-            return valor;
-        }
-    }
-    return ("");
-}
-
 rapidxml::xml_node<char>* add_tube(const rapidxml::xml_node<char> &parent_node,
         float x, float y, float radius, std::string id,
         const std::string &x_label, const std::string &y_label) {
@@ -108,14 +94,47 @@ int main(int argc, char *argv[]) {
 
     namespace po = boost::program_options;
     std::string leg = "both";
+    float tube_od = 1.f;
+    float min_x, width;
+    float min_y, height;
+    std::string font_size;
+    std::string x_labels_param;
+    std::string y_labels_param;
+    std::vector<std::string> x_labels_coords;
+    std::vector<std::string> y_labels_coords;
 
     try {
         po::options_description settings_desc("CSV to SVG Settings");
         settings_desc.add_options()("leg",
                 po::value<std::string>(&leg)->default_value("both"),
                 "Leg (hot, cold, both)");
+        settings_desc.add_options()("tube_od",
+                po::value<float>(&tube_od)->default_value(1.f),
+                "Tube Outside Diameter in inches");
+        settings_desc.add_options()("min_x",
+                po::value<float>(&min_x)->default_value(0),
+                "X minimum coord");
+        settings_desc.add_options()("width",
+                po::value<float>(&width)->default_value(0),
+                "viewBoxWidth");
+        settings_desc.add_options()("min_y",
+                po::value<float>(&min_y)->default_value(0),
+                "Y minimum coord");
+        settings_desc.add_options()("height",
+                po::value<float>(&height)->default_value(0),
+                "viewBox Height");
+        settings_desc.add_options()("font_size",
+                po::value<std::string>(&font_size)->default_value("0.25"),
+                "Number font size in px");
+        settings_desc.add_options()("x_labels",
+                po::value<std::string>(&x_labels_param)->default_value("0"),
+                "Where to locate x axis labels, can use several coords separated by space");
+        settings_desc.add_options()("y_labels",
+                po::value<std::string>(&y_labels_param)->default_value("0"),
+                "Where to locate x axis labels, can use several coords separated by space");
 
         po::variables_map vm;
+
         po::store(po::parse_command_line(argc, argv, settings_desc), vm);
         std::filesystem::path config = std::filesystem::path("csv_to_svg.ini");
         if (std::filesystem::exists(config)) {
@@ -123,17 +142,15 @@ int main(int argc, char *argv[]) {
             po::store(po::parse_config_file(config_is, settings_desc), vm);
         }
         po::notify(vm);
+
+        boost::split(x_labels_coords, x_labels_param, boost::is_any_of(" "));
+        boost::split(y_labels_coords, y_labels_param, boost::is_any_of(" "));
+
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
     }
 
-    float tube_od = std::stof(read_tube_specs("TUBE_OD"));
     float tube_r = tube_od / 2;
-
-    float calle_ancha = std::stof(read_tube_specs("CALLE_ANCHA"));
-
-    int margin_x = 1;
-    int margin_y = 1;
 
     // Parse the CSV file to extract the data for each tube
     std::map<std::string, tube> tubes;
@@ -149,58 +166,20 @@ int main(int argc, char *argv[]) {
     while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
         if (leg == "cold" || leg == "both") {
             tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)),
-                    { x_label, y_label, cl_x,
-                            -(cl_y + (calle_ancha / 2)) } });
+                    { x_label, y_label, cl_x, cl_y } });
             x_labels.insert(std::make_pair(x_label, cl_x));
             y_labels.insert(
-                    std::make_pair(y_label, -(cl_y + (calle_ancha / 2))));
+                    std::make_pair(y_label, cl_y));
         }
 
         if (leg == "hot" || leg == "both") {
             tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)),
-                    { x_label, y_label, hl_x, hl_y + (calle_ancha / 2) } });
+                    { x_label, y_label, hl_x, hl_y } });
             x_labels.insert(std::make_pair(x_label, hl_x));
             y_labels.insert(
-                    std::make_pair(y_label, (hl_y + (calle_ancha / 2))));
+                    std::make_pair(y_label, hl_y));
         }
     }
-
-    // Search for max x and y distances
-    auto min_x_it = std::min_element(tubes.begin(), tubes.end(),
-            [](auto a, auto b) {
-                return a.second.x < b.second.x;
-            });
-    float min_x = (*min_x_it).second.x;
-    std::cout << "min X :" << min_x << '\n';
-
-    auto min_y_it = std::min_element(tubes.begin(), tubes.end(),
-            [](auto a, auto b) {
-                return a.second.y < b.second.y;
-            });
-    float min_y = (*min_y_it).second.y;
-    std::cout << "min Y :" << min_y << '\n';
-
-    // Search for max x and y distances
-    auto max_x_it = std::max_element(tubes.begin(), tubes.end(),
-            [](auto a, auto b) {
-                return a.second.x < b.second.x;
-            });
-    float max_x = (*max_x_it).second.x;
-    std::cout << "max X :" << max_x << '\n';
-
-    auto max_y_it = std::max_element(tubes.begin(), tubes.end(),
-            [](auto a, auto b) {
-                return a.second.y < b.second.y;
-            });
-    float max_y = (*max_y_it).second.y;
-    std::cout << "max Y :" << max_y << '\n';
-
-    auto abs_max_y_it = std::max_element(tubes.begin(), tubes.end(),
-            [](auto a, auto b) {
-                return std::abs(a.second.y) < std::abs(b.second.y);
-            });
-    float abs_max_y = std::abs((*abs_max_y_it).second.y);
-    std::cout << "Absolute max Y :" << abs_max_y << '\n';
 
     // Create the SVG document
     rapidxml::xml_document<char> doc;
@@ -209,45 +188,46 @@ int main(int argc, char *argv[]) {
     append_attributes(doc, svg_node,
             { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
                     "id", "tubesheet_svg" }, { "height", "auto" }, { "width",
-                    "auto" }, { "viewBox", std::to_string(
-                    -margin_x + std::floor(min_x)) + " "
-                    + std::to_string(-margin_y + std::floor(min_y)) + " "
-                    + std::to_string(std::ceil(max_x) + margin_x) + " "
-                    + std::to_string(std::ceil(2 * abs_max_y) + margin_y) } });
+                    "auto" }, { "viewBox",
+                      std::to_string(min_x) + " "
+                    + std::to_string(min_y) + " "
+                    + std::to_string(width) + " "
+                    + std::to_string(height) } });
 
     auto style_node = doc.allocate_node(rapidxml::node_element, "style");
     append_attributes(doc, style_node, { { "type", "text/css" } });
 
-    style_node->value(
-            ".tube {stroke: black; stroke-width: 0.02; fill: white;} "
-                    ".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: black;}"
-                    ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}");
+    std::string style = std::string(".tube {stroke: black; stroke-width: 0.02; fill: white;} ") +
+            ".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: " + font_size + "px; fill: black;}"
+            ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}";
+
+    style_node->value(style.c_str());
 
     svg_node->append_node(style_node);
     doc.append_node(svg_node);
 
-    add_dashed_line(svg_node, -margin_x + +std::floor(min_x), 0,
-            std::ceil(max_x) + margin_x, 0);
-    add_dashed_line(svg_node, 0, -margin_y + std::floor(min_y), 0,
-            std::ceil(max_y) + margin_y);
+    add_dashed_line(svg_node, min_x, 0,
+            min_x + width, 0);
+    add_dashed_line(svg_node, 0, min_y, 0,
+            min_y + height);
 
-    for (auto [label, coord] : x_labels) {
-        std::cout << "labels coord X: " << label << " : " << coord << "\n";
-
-        auto label_x = add_label(svg_node, coord, -margin_y * 0.75,
-                label.c_str());
-        append_attributes(doc, label_x,
-                { { "transform", "rotate(270," + std::to_string(coord) + ", -"
-                        + std::to_string(margin_y * 0.75) + ")" }, });
-        svg_node->append_node(label_x);
+    for (auto coord_y : x_labels_coords) {
+        for (auto [label, coord] : x_labels) {
+            auto label_x = add_label(svg_node, coord, std::stof(coord_y),
+                    label.c_str());
+            append_attributes(doc, label_x,
+                    { { "transform", "rotate(270," + std::to_string(coord) + ", "
+                            + coord_y + ")" }, });
+            svg_node->append_node(label_x);
+        }
     }
 
-    for (auto [label, coord] : y_labels) {
-        std::cout << "labels coord Y: " << label << " : " << coord << "\n";
-
-        auto label_y = add_label(svg_node, -margin_x * 0.75, coord,
-                label.c_str());
-        svg_node->append_node(label_y);
+    for (auto coord_x : y_labels_coords) {
+        for (auto [label, coord] : y_labels) {
+            auto label_y = add_label(svg_node, std::stof(coord_x), coord,
+                    label.c_str());
+            svg_node->append_node(label_y);
+        }
     }
 
     // Create an SVG circle element for each tube in the CSV data
