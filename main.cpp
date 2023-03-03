@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
     std::vector<std::string> y_labels_coords;
 
     try {
-        po::options_description settings_desc("CSV to SVG Settings");
+        po::options_description settings_desc("HX Settings");
         settings_desc.add_options()("leg",
                 po::value<std::string>(&leg)->default_value("both"),
                 "Leg (hot, cold, both)");
@@ -113,13 +113,13 @@ int main(int argc, char *argv[]) {
                 "Tube Outside Diameter in inches");
         settings_desc.add_options()("min_x",
                 po::value<float>(&min_x)->default_value(0),
-                "X minimum coord");
+                "viewBox X minimum coord");
         settings_desc.add_options()("width",
                 po::value<float>(&width)->default_value(0),
                 "viewBoxWidth");
         settings_desc.add_options()("min_y",
                 po::value<float>(&min_y)->default_value(0),
-                "Y minimum coord");
+                "viewBox Y minimum coord");
         settings_desc.add_options()("height",
                 po::value<float>(&height)->default_value(0),
                 "viewBox Height");
@@ -132,16 +132,22 @@ int main(int argc, char *argv[]) {
         settings_desc.add_options()("y_labels",
                 po::value<std::string>(&y_labels_param)->default_value("0"),
                 "Where to locate x axis labels, can use several coords separated by space");
-
+        settings_desc.add_options()
+              ("help,h", "Help screen");    // what an strange syntax...
+              // ("config", po::value<std::string>(), "Config file");
         po::variables_map vm;
 
         po::store(po::parse_command_line(argc, argv, settings_desc), vm);
-        std::filesystem::path config = std::filesystem::path("csv_to_svg.ini");
+        std::filesystem::path config = std::filesystem::path("config.ini");
         if (std::filesystem::exists(config)) {
             std::ifstream config_is = std::ifstream(config);
-            po::store(po::parse_config_file(config_is, settings_desc), vm);
+            po::store(po::parse_config_file(config_is, settings_desc, true), vm);
         }
         po::notify(vm);
+
+        if (vm.count("help")) {
+              std::cout << settings_desc << '\n';
+        }
 
         boost::split(x_labels_coords, x_labels_param, boost::is_any_of(" "));
         boost::split(y_labels_coords, y_labels_param, boost::is_any_of(" "));
