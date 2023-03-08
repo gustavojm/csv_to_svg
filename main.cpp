@@ -172,18 +172,18 @@ int main(int argc, char *argv[]) {
     while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
         if (leg == "cold" || leg == "both") {
             tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)),
-                    { x_label, y_label, cl_x, cl_y } });
+                    { x_label, y_label, cl_x, -cl_y } });
             x_labels.insert(std::make_pair(x_label, cl_x));
             y_labels.insert(
-                    std::make_pair(y_label, cl_y));
+                    std::make_pair(y_label, -cl_y));
         }
 
         if (leg == "hot" || leg == "both") {
             tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)),
-                    { x_label, y_label, hl_x, hl_y } });
+                    { x_label, y_label, hl_x, -hl_y } });
             x_labels.insert(std::make_pair(x_label, hl_x));
             y_labels.insert(
-                    std::make_pair(y_label, hl_y));
+                    std::make_pair(y_label, -hl_y));
         }
     }
 
@@ -193,8 +193,7 @@ int main(int argc, char *argv[]) {
 
     append_attributes(doc, svg_node,
             { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
-                    "id", "tubesheet_svg" },
-                    { "viewBox",
+                    "id", "tubesheet_svg" }, { "viewBox",
                       std::to_string(min_x) + " "
                     + std::to_string(min_y) + " "
                     + std::to_string(width) + " "
