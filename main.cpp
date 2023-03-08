@@ -193,8 +193,8 @@ int main(int argc, char *argv[]) {
 
     append_attributes(doc, svg_node,
             { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
-                    "id", "tubesheet_svg" }, { "height", "auto" }, { "width",
-                    "auto" }, { "viewBox",
+                    "id", "tubesheet_svg" },
+                    { "viewBox",
                       std::to_string(min_x) + " "
                     + std::to_string(min_y) + " "
                     + std::to_string(width) + " "
