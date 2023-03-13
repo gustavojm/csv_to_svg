@@ -12,7 +12,7 @@
 #include <boost/program_options.hpp>
 #include <boost/algorithm/string.hpp>
 
-struct tube {
+struct Tube {
     std::string x_label;
     std::string y_label;
     float x;
@@ -33,16 +33,16 @@ void append_attributes(rapidxml::xml_document<char> *doc,
     }
 }
 
-void add_dashed_line(rapidxml::xml_document<char> *doc,
-        rapidxml::xml_node<char> *parent_node, float x1, float y1, float x2,
+rapidxml::xml_node<char>* add_dashed_line(rapidxml::xml_document<char> *doc,
+        float x1, float y1, float x2,
         float y2) {
     auto line_node = doc->allocate_node(rapidxml::node_element, "line");
-    append_attributes(doc, line_node, { { "x1", std::to_string(x1) }, { "y1",
-            std::to_string(y1) }, { "x2", std::to_string(x2) }, { "y2",
-            std::to_string(y2) }, { "stroke", "gray" },
+    append_attributes(doc, line_node, { { "x1", std::to_string(x1) },
+            { "y1", std::to_string(y1) }, { "x2", std::to_string(x2) },
+            { "y2", std::to_string(y2) }, { "stroke", "gray" },
             { "stroke-width", "0.02" }, { "stroke-dasharray", "0.2, 0.1" }, });
 
-    parent_node->append_node(line_node);
+    return line_node;
 }
 
 rapidxml::xml_node<char>* add_label(rapidxml::xml_document<char> *doc,
@@ -51,41 +51,37 @@ rapidxml::xml_node<char>* add_label(rapidxml::xml_document<char> *doc,
     auto label_node = doc->allocate_node(rapidxml::node_element, "text",
             doc->allocate_string(label));
 
-    append_attributes(doc, label_node, { { "x", std::to_string(x) }, { "y",
-            std::to_string(y) }, { "class", "label" }, });
+    append_attributes(doc, label_node, { { "x", std::to_string(x) },
+            { "y", std::to_string(y) }, { "class", "label" }, });
 
     return label_node;
 }
 
 rapidxml::xml_node<char>* add_tube(rapidxml::xml_document<char> *doc,
-        float x, float y,
-        float radius, std::string id, const std::string &x_label,
-        const std::string &y_label) {
+        Tube tube, std::string id, float radius) {
     auto tube_group_node = doc->allocate_node(rapidxml::node_element, "g");
     append_attributes(doc, tube_group_node,
             { { "id", doc->allocate_string(id.c_str()) },
-                    { "data-col", x_label }, { "data-row", y_label }
-
-            });
+              { "data-col", tube.x_label }, { "data-row", tube.y_label } });
 
     auto tube_node = doc->allocate_node(rapidxml::node_element, "circle");
-    append_attributes(doc, tube_node, { { "cx", std::to_string(x) }, { "cy",
-            std::to_string(y) }, { "r", std::to_string(radius) }, { "class",
-            "tube" }, });
+    append_attributes(doc, tube_node, { { "cx", std::to_string(tube.x) },
+            { "cy", std::to_string(tube.y) }, { "r", std::to_string(radius) },
+            { "class", "tube" }, });
 
     auto tooltip_node = doc->allocate_node(rapidxml::node_element, "title");
     tooltip_node->value(
             doc->allocate_string(
-                    (std::string("Col=") + x_label + " Row=" + y_label).c_str()));
+                    (std::string("Col=") + tube.x_label + " Row=" + tube.y_label).c_str()));
     tube_group_node->append_node(tooltip_node);
     tube_group_node->append_node(tube_node);
     auto number_node = doc->allocate_node(rapidxml::node_element, "text",
             doc->allocate_string(id.substr(2).c_str()));
     //number_node->value();
-    append_attributes(doc, number_node, { { "class", "tube_num" }, { "x",
-            std::to_string(x) }, { "y", std::to_string(y) }, {
-            "transform-origin", std::to_string(x) + " " + std::to_string(y) }, {
-            "transform", "scale(1,-1)" }, });
+    append_attributes(doc, number_node, { { "class", "tube_num" },
+            { "x", std::to_string(tube.x) }, { "y", std::to_string(tube.y) },
+            { "transform-origin", std::to_string(tube.x) + " " + std::to_string(tube.y) },
+            { "transform", "scale(1,-1)" }, });
 
     tube_group_node->append_node(number_node);
     return tube_group_node;
@@ -102,8 +98,8 @@ int main(int argc, char *argv[]) {
     std::string font_size;
     std::string x_labels_param;
     std::string y_labels_param;
-    std::vector<std::string> x_labels_coords;
-    std::vector<std::string> y_labels_coords;
+    std::vector<std::string> config_x_labels_coords;
+    std::vector<std::string> config_y_labels_coords;
 
     try {
         po::options_description settings_desc("HX Settings");
@@ -149,8 +145,8 @@ int main(int argc, char *argv[]) {
             std::cout << settings_desc << '\n';
         }
 
-        boost::split(x_labels_coords, x_labels_param, boost::is_any_of(" "));
-        boost::split(y_labels_coords, y_labels_param, boost::is_any_of(" "));
+        boost::split(config_x_labels_coords, x_labels_param, boost::is_any_of(" "));
+        boost::split(config_y_labels_coords, y_labels_param, boost::is_any_of(" "));
 
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
@@ -159,7 +155,7 @@ int main(int argc, char *argv[]) {
     float tube_r = tube_od / 2;
 
     // Parse the CSV file to extract the data for each tube
-    std::map<std::string, tube> tubes;
+    std::map<std::string, Tube> tubes;
     std::set<std::pair<std::string, float>> x_labels;
     std::set<std::pair<std::string, float>> y_labels;
     io::CSVReader<7, io::trim_chars<' ', '\t'>, io::no_quote_escape<';'>> in(
@@ -191,8 +187,9 @@ int main(int argc, char *argv[]) {
     auto svg_node = doc->allocate_node(rapidxml::node_element, "svg");
 
     append_attributes(doc, svg_node,
-            { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" }, {
-                    "id", "tubesheet_svg" }, { "viewBox", std::to_string(min_x)
+            { { "xmlns", "http://www.w3.org/2000/svg" }, { "version", "1.1" },
+                    { "id", "tubesheet_svg" },
+                    { "viewBox", std::to_string(min_x)
                     + " " + std::to_string(min_y) + " " + std::to_string(width)
                     + " " + std::to_string(height) }, });
 
@@ -200,12 +197,11 @@ int main(int argc, char *argv[]) {
     append_attributes(doc, style_node, { { "type", "text/css" } });
 
     std::string style =
-            std::string(
-                    ".tube {stroke: black; stroke-width: 0.02; fill: white;} ")
+            std::string(".tube {stroke: black; stroke-width: 0.02; fill: white;} ")
                     + ".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: "
                     + font_size
                     + "px; fill: black;}"
-                            ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}";
+                    ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}";
 
     style_node->value(style.c_str());
 
@@ -213,34 +209,36 @@ int main(int argc, char *argv[]) {
     doc->append_node(svg_node);
 
     auto cartesian_g_node = doc->allocate_node(rapidxml::node_element, "g");
-    append_attributes(doc, cartesian_g_node, { { "id", "cartesian" }, {
-            "transform", "scale(1,-1)" } });
+    append_attributes(doc, cartesian_g_node, { { "id", "cartesian" },
+            { "transform", "scale(1,-1)" } }
+    );
     svg_node->append_node(cartesian_g_node);
 
-    add_dashed_line(doc, cartesian_g_node, min_x, 0, min_x + width, 0);
-    add_dashed_line(doc, cartesian_g_node, 0, min_y, 0, min_y + height);
+    auto x_axis = add_dashed_line(doc, 0, min_y, 0, min_y + height);
+    auto y_axis = add_dashed_line(doc, min_x, 0, min_x + width, 0);
+    cartesian_g_node->append_node(x_axis);
+    cartesian_g_node->append_node(y_axis);
 
-    for (auto coord_y : x_labels_coords) {
+    for (auto config_coord : config_x_labels_coords) {
         for (auto [label, coord] : x_labels) {
             auto label_x = add_label(doc, coord,
-                    std::stof(coord_y), label.c_str());
+                    std::stof(config_coord), label.c_str());
             append_attributes(doc, label_x,
-                      {
-                        { "transform-origin", std::to_string(coord) + " " + coord_y },
-                        { "transform", "scale(1, -1) rotate(270)" },
-
-                    });
+                      { { "transform-origin", std::to_string(coord) + " " + config_coord },
+                        { "transform", "scale(1, -1) rotate(270)" },}
+            );
             cartesian_g_node->append_node(label_x);
         }
     }
 
-    for (auto coord_x : y_labels_coords) {
+    for (auto config_coord : config_y_labels_coords) {
         for (auto [label, coord] : y_labels) {
-            auto label_y = add_label(doc, std::stof(coord_x),
+            auto label_y = add_label(doc, std::stof(config_coord),
                     coord, label.c_str());
             append_attributes(doc, label_y,
-                    { { "transform-origin", coord_x + " " + std::to_string(coord) },
-                      { "transform", "scale(1, -1)" }, });
+                    { { "transform-origin", config_coord + " " + std::to_string(coord) },
+                      { "transform", "scale(1, -1)" }, }
+            );
            cartesian_g_node->append_node(label_y);
         }
     }
@@ -249,10 +247,8 @@ int main(int argc, char *argv[]) {
     for (const auto &tube_pair : tubes) {
         auto tube = tube_pair.second;
 
-        auto tube_node = add_tube(doc, tube.x, tube.y, tube_r,
-                tube_pair.first, tube.x_label, tube.y_label);
+        auto tube_node = add_tube(doc, tube, tube_pair.first, tube_r);
         cartesian_g_node->append_node(tube_node);
-
     }
 
     // Write the SVG document to a file
