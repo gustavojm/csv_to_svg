@@ -35,12 +35,16 @@ void append_attributes(rapidxml::xml_document<char> *doc,
 
 rapidxml::xml_node<char>* add_dashed_line(rapidxml::xml_document<char> *doc,
         float x1, float y1, float x2,
-        float y2) {
+        float y2, float font_size) {
+    float stroke_width = font_size / 10;
+    float line = font_size / 2;
+    float space = line / 2;
+
     auto line_node = doc->allocate_node(rapidxml::node_element, "line");
     append_attributes(doc, line_node, { { "x1", std::to_string(x1) },
             { "y1", std::to_string(y1) }, { "x2", std::to_string(x2) },
             { "y2", std::to_string(y2) }, { "stroke", "gray" },
-            { "stroke-width", "0.02" }, { "stroke-dasharray", "0.2, 0.1" }, });
+            { "stroke-width", std::to_string(stroke_width) }, { "stroke-dasharray", std::to_string(line) + ", " + std::to_string(space) }, });
 
     return line_node;
 }
@@ -196,12 +200,14 @@ int main(int argc, char *argv[]) {
     auto style_node = doc->allocate_node(rapidxml::node_element, "style");
     append_attributes(doc, style_node, { { "type", "text/css" } });
 
+    float stroke_width = stof(font_size) / 10;
+
     std::string style =
-            std::string(".tube {stroke: black; stroke-width: 0.02; fill: white;} ")
+            std::string(".tube {stroke: black; stroke-width: "+ std::to_string(stroke_width) + " ; fill: white;} ")
                     + ".tube_num { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: "
                     + font_size
                     + "px; fill: black;}"
-                    ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: 0.25px; fill: red;}";
+                    ".label { text-anchor: middle; alignment-baseline: middle; font-family: sans-serif; font-size: " + font_size + "; fill: red;}";
 
     style_node->value(style.c_str());
 
@@ -214,8 +220,8 @@ int main(int argc, char *argv[]) {
     );
     svg_node->append_node(cartesian_g_node);
 
-    auto x_axis = add_dashed_line(doc, 0, min_y, 0, min_y + height);
-    auto y_axis = add_dashed_line(doc, min_x, 0, min_x + width, 0);
+    auto x_axis = add_dashed_line(doc, 0, min_y, 0, min_y + height, stof(font_size));
+    auto y_axis = add_dashed_line(doc, min_x, 0, min_x + width, 0, stof(font_size));
     cartesian_g_node->append_node(x_axis);
     cartesian_g_node->append_node(y_axis);
 
