@@ -80,7 +80,7 @@ rapidxml::xml_node<char>* add_tube(rapidxml::xml_document<char> *doc,
     tube_group_node->append_node(tooltip_node);
     tube_group_node->append_node(tube_node);
     auto number_node = doc->allocate_node(rapidxml::node_element, "text",
-            doc->allocate_string(id.substr(2).c_str()));
+            doc->allocate_string(id.substr(3).c_str()));
     //number_node->value();
     append_attributes(doc, number_node, { { "class", "tube_num" },
             { "x", std::to_string(tube.x) }, { "y", std::to_string(tube.y) },
@@ -171,14 +171,14 @@ int main(int argc, char *argv[]) {
     std::string tube_id;
     while (in.read_row(x_label, y_label, cl_x, cl_y, hl_x, hl_y, tube_id)) {
         if (leg == "cold" || leg == "both") {
-            tubes.insert( { std::string(std::string("cl") + tube_id.substr(5)),
+            tubes.insert( { std::string(std::string("CL_") + tube_id.substr(5)),
                     { x_label, y_label, cl_x, cl_y } });
             x_labels.insert(std::make_pair(x_label, cl_x));
             y_labels.insert(std::make_pair(y_label, cl_y));
         }
 
         if (leg == "hot" || leg == "both") {
-            tubes.insert( { std::string(std::string("hl") + tube_id.substr(5)),
+            tubes.insert( { std::string(std::string("HL_") + tube_id.substr(5)),
                     { x_label, y_label, hl_x, hl_y } });
             x_labels.insert(std::make_pair(x_label, hl_x));
             y_labels.insert(std::make_pair(y_label, hl_y));
